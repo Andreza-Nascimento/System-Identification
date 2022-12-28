@@ -1,0 +1,28 @@
+X = load('furnas.dat');
+
+%i = randi([1,60],5,1);
+
+t = 1:1:12;
+for n=1:5
+    plot(t, X(i(n,1),:));
+    hold on
+end
+hold off
+
+for j=1:12
+    media(1,j) = mean(X(:,j));
+    desvio(1,j) = std(X(:,j));
+end
+
+% figure;
+% plot(t, media(1,:));
+% hold on
+% plot(t, media(1,5)+desvio(1,5));
+% plot(t, media(1,5)-desvio(1,5));
+% hold off
+
+correl1 = corrcoef(X(:,1),X(:,4));
+correl2 = corrcoef(X(:,5),X(:,6));
+correl3 = corrcoef(X(:,7),X(:,9));
+correl4 = corrcoef(X(:,11),X(:,12));
+
