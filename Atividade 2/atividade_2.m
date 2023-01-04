@@ -103,11 +103,11 @@ hold off
 
 x(1)=sqrt(pot_awgn)*randn;
 
-for t=2:N
+for t=2:N   %2*N
     x(t)=a_0+a_1*x(t-1)+sqrt(pot_awgn)*randn;
 end
 x=x(:);
-x=x(N+1:end);
+%x=x(N+1:end);
 
 m_x = mean(x);
 var_x = var(x);
@@ -151,3 +151,31 @@ set(fig.Children, ...
 % remove unnecessary white space
 set(gca,'LooseInset',max(get(gca,'TightInset'), 0.02))
 hold off
+
+%% Item 3
+
+clc;clear;
+
+N = 5000;
+pot_awgn = 0.1;
+a_0 = 2;
+a_1 = 0.85;
+tau_max = 20;
+
+x(1)=sqrt(pot_awgn)*randn;
+
+for t=2:N   %2*N
+    x(t)=a_0+a_1*x(t-1)+sqrt(pot_awgn)*randn;
+end
+x=x(:);
+%x=x(N+1:end);
+
+K = 5;
+N_novo = 1250;
+
+sub_x1 = x(1:N_novo);
+sub_x2 = x(N_novo+1:2*N_novo);
+sub_x3 = x(2*N_novo+1:3*N_novo);
+sub_x4 = x(3*N_novo+1:4*N_novo);
+
+m_sub_x1 = sum(sub_x1)/K; %PAREI AQUI
