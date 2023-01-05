@@ -157,7 +157,7 @@ set(fig.Children, ...
 set(gca,'LooseInset',max(get(gca,'TightInset'), 0.02))
 hold off
 
-%% Item 3 - Meu método
+%% Item 3
 
 clc;clear;
 
@@ -169,11 +169,11 @@ tau_max = 20;
 
 x(1)=sqrt(pot_awgn)*randn;
 
-for t=2:2*N   %para eliminar o efeito da condição inicial
+for t=2:2*N
     x(t)=a_0+a_1*x(t-1)+sqrt(pot_awgn)*randn;
 end
 x=x(:);
-x=x(N+1:end);   %para eliminar o efeito da condição inicial
+x=x(N+1:end);
 
 K = 4;
 N_sub = 1250;
