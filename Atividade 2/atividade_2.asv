@@ -1,4 +1,6 @@
-
+% DISCIPLINA: TIP7044 - ESTIMAÇÃO E IDENTIFICAÇÃO DE SISTEMAS (2022.2 - T01)
+% PROFESSOR: GUILHERME DE ALENCAR BARRETO
+% ALUNO
 
 %% Item 1
 clc;clear;
@@ -152,7 +154,7 @@ set(fig.Children, ...
 set(gca,'LooseInset',max(get(gca,'TightInset'), 0.02))
 hold off
 
-%% Item 3
+%% Item 3 - Meu método
 
 clc;clear;
 
