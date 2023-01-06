@@ -5,9 +5,9 @@
 
 % 1º TRABALHO COMPUTACIONAL
 
-%% Parte 1 - Método Artigo
+%% Parte 1 - Normalização (Método Artigo)
 
-clc;clear;
+clc;clear; close all;
 
 serie_vazoes = load('furnas.dat');
 
@@ -194,4 +194,83 @@ set(fig.Children, ...
 set(gca,'LooseInset',max(get(gca,'TightInset'), 0.02))
 hold off
 
-%% Item 2
+
+%------------------------------- FAC e FACP -------------------------------%
+
+
+[facp_serie lag] = parcorr(modulo_serie);
+tau_max = size(lag,2);
+fac_serie = myfac3(modulo_serie,tau_max);
+fac_serie(:,tau_max+1)=[];                     % para obecer ao requisito da função parcorr
+
+fig = figure; clf
+
+% for i=1:tau_max+1
+%     tau(i) = i-1;
+% end
+
+h = stem(lag,fac_serie,'-r','LineWidth',1.5); hold on
+
+% define figure properties
+opts.Colors     = set(groot,'defaultAxesColorOrder');
+opts.saveFolder = 'img/';
+opts.width      = 20;
+opts.height     = 10;
+opts.fontType   = 'Times';
+opts.fontSize   = 24.6;
+
+% add axis labes and legend
+axis tight
+title('Funcao de Autocorrelacao')
+xlabel('tau (lag)')
+ylabel('FAC')
+%legend('1960','1946','1970','1972','1975')
+
+% scaling
+fig.Units               = 'centimeters';
+fig.Position(3)         = opts.width;
+fig.Position(4)         = opts.height;
+
+% set text properties
+set(fig.Children, ...
+    'FontName',     'Times', ...
+    'FontSize',     23);
+
+% remove unnecessary white space
+set(gca,'LooseInset',max(get(gca,'TightInset'), 0.02))
+hold off
+
+fig = figure; clf
+
+h = stem(lag,facp_serie,'-r','LineWidth',1.5); hold on
+
+grid on
+
+% define figure properties
+opts.Colors     = get(groot,'defaultAxesColorOrder');
+opts.saveFolder = 'img/';
+opts.width      = 20;
+opts.height     = 10;
+opts.fontType   = 'Times';
+opts.fontSize   = 24.6;
+
+% add axis labes and legend
+axis tight
+title('Funcao de Autocorrelacao Parcial')
+xlabel('tau (lag)')
+ylabel('FACP')
+%legend('1960','1946','1970','1972','1975')
+
+% scaling
+fig.Units               = 'centimeters';
+fig.Position(3)         = opts.width;
+fig.Position(4)         = opts.height;
+
+% set text properties
+set(fig.Children, ...
+    'FontName',     'Times', ...
+    'FontSize',     23);
+
+% remove unnecessary white space
+set(gca,'LooseInset',max(get(gca,'TightInset'), 0.02))
+hold off
