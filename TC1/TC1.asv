@@ -237,4 +237,6 @@ set(fig.Children, ...
 set(gca,'LooseInset',max(get(gca,'TightInset'), 0.02))
 hold off
 
+%HISTOGRAMA
+
 %% Item 2
