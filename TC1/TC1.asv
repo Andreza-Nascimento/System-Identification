@@ -210,7 +210,7 @@ tau_max = size(lag,2);
 fac_serie = myfac3(modulo_serie,tau_max);
 fac_serie(:,tau_max+1)=[];                     % para obecer ao requisito da função parcorr
 stand_err = ones(1,21);
-stand_err = stand_err*1/sqrt(tau_max);
+stand_err = stand_err*1.96/sqrt(tau_max);
 
 fig = figure; clf
 
@@ -221,8 +221,7 @@ fig = figure; clf
 h = stem(lag,fac_serie,'-r','LineWidth',1.5); hold on
 
 grid on
-h = line(lag,stand_err,'color','blue','LineStyle','--')
-h = line(lag,stand_err*(-1),'color','blue','LineStyle','--')
+h = stem(lag,stand_err)
 
 % define figure properties
 opts.Colors     = set(groot,'defaultAxesColorOrder');
