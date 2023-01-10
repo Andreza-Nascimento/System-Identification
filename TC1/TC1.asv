@@ -198,30 +198,26 @@ hold off
 
 %------------------------------- FAC e FACP -------------------------------%
 
-% tau_max = 25;
-% r(1)=1;
-% for i=2:tau_max
-%     tau(i) = i-1;
-%     r(i) = sum((modulo_serie(1,i)-mean(modulo_serie)).*(modulo_serie(1,i-1)-mean(modulo_serie)))/sum((modulo_serie(1,i)-mean(modulo_serie))^2);
-% end
+tau_max = 25;
+fac_serie = myfac(modulo_serie,tau_max);
+z = fac_serie(1:tau_max+1);
+%r = ones(tau_max+1,1);
+r(1:tau_max+1) = 1;
+r = z(2:end);
+R = toeplitz(z(1:tau_max));
+facp_serie = R\r;
 
-[facp_serie lag] = parcorr(modulo_serie);
-tau_max = size(lag,2);
-fac_serie = myfac3(modulo_serie,tau_max);
-fac_serie(:,tau_max+1)=[];                     % para obecer ao requisito da função parcorr
-stand_err = ones(1,21);
-stand_err = stand_err*1.96/sqrt(tau_max);
+for i=1:tau_max+1
+    lag(i) = i-1;
+end
 
 fig = figure; clf
 
-% for i=1:tau_max+1
-%     tau(i) = i-1;
-% end
-
-h = stem(lag,fac_serie,'-r','LineWidth',1.5); hold on
+h = stem(fac_serie,'-r','LineWidth',1.5); hold on
 
 grid on
-h = stem(lag,stand_err)
+%h = line(lag,stand_err,'color','blue','LineStyle','--')
+%h = line(lag,stand_err*(-1),'color','blue','LineStyle','--')
 
 % define figure properties
 opts.Colors     = set(groot,'defaultAxesColorOrder');
@@ -254,7 +250,7 @@ hold off
 
 fig = figure; clf
 
-h = stem(lag,facp_serie,'-r','LineWidth',1.5); hold on
+h = stem(facp_serie,'-r','LineWidth',1.5); hold on
 
 grid on
 
