@@ -213,8 +213,8 @@ fig = figure; clf
 h = stem(fac_serie,'-r','LineWidth',1.5); hold on
 
 grid on
-h = line(stand_err_fac,'color','blue','LineStyle','--');
-h = line(stand_err_fac*(-1),'color','blue','LineStyle','--');
+h = plot(stand_err_fac,'--b');
+h = plot(stand_err_fac*(-1),'--b');
 
 % define figure properties
 opts.Colors     = set(groot,'defaultAxesColorOrder');
@@ -250,8 +250,8 @@ fig = figure; clf
 h = stem(facp_serie,'-r','LineWidth',1.5); hold on
 
 grid on
-h = line(stand_err_facp,'color','blue','LineStyle','--');
-h = line(stand_err_facp*(-1),'color','blue','LineStyle','--');
+h = plot(stand_err_facp,'--b');
+h = plot(stand_err_facp*(-1),'--b');
 
 % define figure properties
 opts.Colors     = get(groot,'defaultAxesColorOrder');
