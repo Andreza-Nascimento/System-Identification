@@ -199,23 +199,22 @@ hold off
 %------------------------------- FAC e FACP -------------------------------%
 
 tau_max = 25;
+n = size(modulo_serie,2);
 fac_serie = myfac(modulo_serie,tau_max);
 z = fac_serie(1:tau_max+1);
 r = z(2:end)';
 R = toeplitz(z(1:tau_max));
 facp_serie = R\r;
-
-for i=1:tau_max+1
-    lag(i) = i-1;
-end
+stand_err_fac(1:tau_max+1) = 1.967/sqrt(n);
+stand_err_facp(1:tau_max) = 1.967/sqrt(n);
 
 fig = figure; clf
 
 h = stem(fac_serie,'-r','LineWidth',1.5); hold on
 
 grid on
-%h = line(lag,stand_err,'color','blue','LineStyle','--')
-%h = line(lag,stand_err*(-1),'color','blue','LineStyle','--')
+h = line(stand_err_fac,'color','blue','LineStyle','--');
+h = line(stand_err_fac*(-1),'color','blue','LineStyle','--');
 
 % define figure properties
 opts.Colors     = set(groot,'defaultAxesColorOrder');
@@ -251,6 +250,8 @@ fig = figure; clf
 h = stem(facp_serie,'-r','LineWidth',1.5); hold on
 
 grid on
+h = line(stand_err_facp,'color','blue','LineStyle','--');
+h = line(stand_err_facp*(-1),'color','blue','LineStyle','--');
 
 % define figure properties
 opts.Colors     = get(groot,'defaultAxesColorOrder');
