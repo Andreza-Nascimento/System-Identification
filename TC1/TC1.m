@@ -67,7 +67,7 @@ n = size(modulo_serie,2);
 
 %--------------------- FAC ---------------------%
 
-fac_serie = myfac(modulo_serie,tau_max);
+fac_serie = myfac3(modulo_serie,tau_max);
 
 %-------------- FACP - YULE-WALKER --------------%
 
@@ -103,20 +103,31 @@ hold off
 
 for p=1:3
     y_real = modulo_serie;
-    coef_fac = myfac(modulo_serie,p);
+    coef_fac = myfac3(modulo_serie,p);
     par_ar_yule = yulewalker(coef_fac,p);
     for i=p+1:n
         y_estimado(i) = sum(par_ar_yule'.*y_real(i-p:i-1));
     end
-    erro_aryule = y_real(p+1:end)-y_estimado(p+1:end);
-    media_erro_aryule(i) = mean(erro_aryule);
-    var_erro_aryule(i) = var(erro_aryule);
-    dp_erro_aryule(i) = std(erro_aryule);
+    erro_aryule = y_real(p+1:end)-y_estimado(1:end-p);
+    media_erro_aryule(p) = mean(erro_aryule);
+    vteste(p) = sum(erro_aryule.^2/(n-p));
+    var_erro_aryule(p) = var(erro_aryule);
+    dp_erro_aryule(p) = std(erro_aryule);
+    fac_erro_aryule = myfac3(erro_aryule,tau_max);
     
     fig = figure; clf
     
-    h = histfit(erro_aryule,20)
+    h = histfit(erro_aryule,20); hold on
+    grid on
     plotlatex(fig, ['Histograma do Resíduo - AR(',num2str(p),')'], ' ', '  ');
+    hold off
+
+    fig = figure; clf
+
+    h = bar(fac_erro_aryule,'white','LineStyle','-','LineWidth',0.5); hold on
+    grid on
+    plotlatex(fig, ['Funcao de Autocorrelacao do Residuo - AR(',num2str(p),')'] , 'tau (lag)', 'FAC')
+    hold on
 end
 
 %------------ ESTIMAÇÃO: MÍNIMOS QUADRADOS ------------%
