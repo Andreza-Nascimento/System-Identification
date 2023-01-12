@@ -100,7 +100,6 @@ plotlatex(fig, 'Funcao de Autocorrelacao Parcial', 'tau (lag)', 'FACP')
 hold off
 
 %--------------- ESTIMAÇÃO: YULE-WALKER ---------------%
-
 for p=1:3
     y_real = modulo_serie;
     coef_fac = myfac(modulo_serie,p);
@@ -110,15 +109,11 @@ for p=1:3
     end
     erro_aryule = y_real(p+1:end)-y_estimado(p+1:end);
     media_erro_aryule(i) = mean(erro_aryule);
-    var_erro_aryule(i) = var(erro_aryule);
-    dp_erro_aryule(i) = std(erro_aryule);
-    
+    dp_
     fig = figure; clf
     
     h = histfit(erro_aryule,20)
-    plotlatex(fig, ['Histograma do Resíduo - AR(',num2str(p),')'], ' ', '  ');
+    plotlatex(fig, ['Histograma do Resíduo - AR(',num2str(p),')'], 'tau (lag)', 'FACP ');
 end
 
 %------------ ESTIMAÇÃO: MÍNIMOS QUADRADOS ------------%
-
-
