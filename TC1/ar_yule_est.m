@@ -16,11 +16,12 @@ y_real = modulo_serie;
 coef_fac = myfac3(modulo_serie,p);
 par_ar_yule = yulewalker(coef_fac,p);
 
-for i=1:n-p
-    y_estimado(i) = sum(par_ar_yule'*y_real(i:i+p-1));
+for i=p+1:n
+    y_n = flip(y_real(i-p:i-1));
+    y_estimado(i-p) = sum(par_ar_yule'.*y_n);
 end
 
-erro_aryule = y_real(1:end-p)-y_estimado(1:end);
+erro_aryule = y_real(p+1:end)-y_estimado;
 media_erro_aryule(p) = mean(erro_aryule);
 vteste(p) = sum(erro_aryule.^2/(n-p));
 var_erro_aryule(p) = var(erro_aryule);
