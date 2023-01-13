@@ -101,46 +101,91 @@ hold off
 
 %--------------- ESTIMAÇÃO: YULE-WALKER ---------------%
 
-% ordem_max = 2;
-% 
-% for p=1:ordem_max
-%     
-%     y_real = modulo_serie;
-%     coef_fac = myfac3(modulo_serie,p);
-%     par_ar_yule = yulewalker(coef_fac,p);
-%     
-%     for i=p+1:n
-%         y_n = flip(y_real(i-p:i-1));
-%         y_estimado(i-p) = sum(par_ar_yule'.*y_n);
-%     end
-% 
-%     erro_aryule = y_real(p+1:end)-y_estimado;
-%     
-%     media_erro_aryule(p) = mean(erro_aryule);
-%     var_erro_aryule(p) = var(erro_aryule);
-%     dp_erro_aryule(p) = std(erro_aryule);
-%     
-%     fac_erro_aryule = myfac3(erro_aryule,tau_max);
-%     
-%     fig = figure; clf
-%     
-%     h = histfit(erro_aryule,20); hold on
-%     grid on
-%     plotlatex(fig, ['Histograma do Resíduo - AR(',num2str(p),')'], ' ', '  ');
-%     hold off
-%     fig = figure; clf
-%     h = bar(fac_erro_aryule,'white','LineStyle','-','LineWidth',0.5); hold on
-%     grid on
-%     plotlatex(fig, ['Funcao de Autocorrelacao do Residuo - AR(',num2str(p),')'] , 'tau (lag)', 'FAC')
-%     hold off
-% end
+ordem_max = 5;
+
+for p=1:ordem_max
+    Ne = N-p;
+    y_real = modulo_serie;
+    coef_fac = myfac3(modulo_serie,p);
+    par_ar_yule = yulewalker(coef_fac,p);
+    
+    for i=p+1:n
+        y_n = flip(y_real(i-p:i-1));
+        y_estimado(i-p) = sum(par_ar_yule'.*y_n);
+    end
+
+    erro_aryule = y_real(p+1:end)-y_estimado;
+    
+    media_erro_aryule(p) = mean(erro_aryule);
+    var_erro_aryule(p) = sum(erro_aryule.^2/Ne);
+    dp_erro_aryule(p) = std(erro_aryule);
+    
+    fac_erro_aryule = myfac3(erro_aryule,tau_max);
+    
+    fig = figure; clf
+    
+    h = histfit(erro_aryule,20); hold on
+    grid on
+    plotlatex(fig, ['Histograma do Resíduo - AR(',num2str(p),')'], ' ', '  ');
+    hold off
+    fig = figure; clf
+    h = bar(fac_erro_aryule,'white','LineStyle','-','LineWidth',0.5); hold on
+    grid on
+    plotlatex(fig, ['Funcao de Autocorrelacao do Residuo - AR(',num2str(p),')'] , 'tau (lag)', 'FAC')
+    hold off
+
+    y_estimado = [];
+end
 
 %------------ ESTIMAÇÃO: MÍNIMOS QUADRADOS ------------%
 
-for p=1:p_max
-    par_ar_ols = ols_est(y_real,p,n);
-    for i=2:n-p
-        y_estimado(i-1)= sum(par_ar_ols'*y_real(i-1:i-p));
+for p=1:ordem_max
+
+    par_ar_ols = ols_est(y_real,p);
+    for i=p+1:n
+        y_nt = flip(y_real(i-p:i-1));
+        y_est(i-p) = sum(par_ar_ols'.*y_nt);
     end
+        
+    erro_ols = y_real(p+1:end)-y_est;
+
+    media_erro_ols(p) = mean(erro_ols);
+    var_erro_ols(p) = sum(erro_ols.^2/Ne);
+    dp_erro_ols(p) = std(erro_ols);
+    
+    fac_erro_ols = myfac3(erro_ols,tau_max);
+    
+    fig = figure; clf
+    
+    h = histfit(erro_ols,20); hold on
+    grid on
+    plotlatex(fig, ['Histograma do Resíduo - OLS ordem ',num2str(p),''], ' ', '  ');
+    hold off
+    fig = figure; clf
+    h = bar(fac_erro_ols,'white','LineStyle','-','LineWidth',0.5); hold on
+    grid on
+    plotlatex(fig, ['Funcao de Autocorrelacao do Residuo - OLS ordem ',num2str(p),''] , 'tau (lag)', 'FAC')
+    hold off
+    
+    teste = y_est;
+
+    y_est = [];
+
 end
+
+%------------ CRITÉRIOS DE INFORMAÇÃO ------------%
+
+for p=1:ordem_max
+    
+    Ne = N-p;
+
+    %--------------- YULE-WALKER ---------------%
+
+    FPE_yule(p) = Ne*log(var_erro_aryule(p))+Ne*log((Ne+p)/(Ne-p));
+    AIC(p) = Ne*log(var_erro_aryule(p))+2*p;
+    BIC(p) = 
+
+    FPE_ols(p) = Ne*log(var_erro_ols(p))+Ne*log((Ne+p)/(Ne-p));
+    AIC(p) = Ne*log(var_erro_ols(p))+2*p;
+
 

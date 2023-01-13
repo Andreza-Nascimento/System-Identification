@@ -39,3 +39,33 @@ h = bar(fac_erro_aryule,'white','LineStyle','-','LineWidth',0.5); hold on
 grid on
 plotlatex(fig, ['Funcao de Autocorrelacao do Residuo - AR(',num2str(p),')'] , 'tau (lag)', 'FAC')
 hold off
+
+
+par_ar_ols = ols_est(y_real,p);
+    for i=p+2:n-p
+        y_nt = flip(y_real(i-p:i-2));
+        y_est(i-p-1) = sum(par_ar_yule'.*y_n);
+    end
+        
+    erro_ols = y_real(p+j:end)-y_est;
+    j = j+1;
+
+    media_erro_ols(p) = mean(erro_ols);
+    var_erro_ols(p) = var(erro_ols);
+    dp_erro_ols(p) = std(erro_ols);
+    
+    fac_erro_ols = myfac3(erro_ols,tau_max);
+    
+    fig = figure; clf
+    
+    h = histfit(erro_ols,20); hold on
+    grid on
+    plotlatex(fig, ['Histograma do Resíduo - OLS ordem ',num2str(p),''], ' ', '  ');
+    hold off
+    fig = figure; clf
+    h = bar(fac_erro_ols,'white','LineStyle','-','LineWidth',0.5); hold on
+    grid on
+    plotlatex(fig, ['Funcao de Autocorrelacao do Residuo - OLS ordem ',num2str(p),''] , 'tau (lag)', 'FAC')
+    hold off
+
+    y_est = [];
