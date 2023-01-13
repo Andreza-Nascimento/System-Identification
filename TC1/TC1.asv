@@ -100,15 +100,17 @@ plotlatex(fig, 'Funcao de Autocorrelacao Parcial', 'tau (lag)', 'FACP')
 hold off
 
 %--------------- ESTIMAÇÃO: YULE-WALKER ---------------%
+p_max = 3;
 
-for p=1:3
+for p=1:p_max
     y_real = modulo_serie;
-    coef_fac = myfac(modulo_serie,p);
+    coef_fac = myfac3(modulo_serie,p);
     par_ar_yule = yulewalker(coef_fac,p);
-    for i=p+1:n
-        y_estimado(i) = sum(par_ar_yule'.*y_real(i-p:i-1));
+    atual = 0;
+    for i=1:n-p
+        y_estimado(i) = sum(par_ar_yule'*y_real(i:i+p-1));
     end
-    erro_aryule = y_real(p+1:end)-y_estimado(1:end-p);
+    erro_aryule = y_real(p+1:end)-y_estimado(1:end);
     media_erro_aryule(p) = mean(erro_aryule);
     vteste(p) = sum(erro_aryule.^2/(n-p));
     var_erro_aryule(p) = var(erro_aryule);
@@ -127,9 +129,17 @@ for p=1:3
     h = bar(fac_erro_aryule,'white','LineStyle','-','LineWidth',0.5); hold on
     grid on
     plotlatex(fig, ['Funcao de Autocorrelacao do Residuo - AR(',num2str(p),')'] , 'tau (lag)', 'FAC')
-
+    hold on
 end
 
+
+%% aicsboiasca
 %------------ ESTIMAÇÃO: MÍNIMOS QUADRADOS ------------%
 
+for p=1:p_max
+    par_ar_ols = ols_est(y_real,p,n);
+    for i=2:n-p
+        y_estimado(i-1)= sum(par_ar_ols'*y_real(i-1:i-p));
+    end
+end
 
