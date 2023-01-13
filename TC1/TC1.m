@@ -104,7 +104,7 @@ hold off
 ordem_max = 5;
 
 for p=1:ordem_max
-    Ne = N-p;
+    Ne = n-p;
     y_real = modulo_serie;
     coef_fac = myfac3(modulo_serie,p);
     par_ar_yule = yulewalker(coef_fac,p);
@@ -140,8 +140,9 @@ end
 %------------ ESTIMAÇÃO: MÍNIMOS QUADRADOS ------------%
 
 for p=1:ordem_max
-
+    Ne = n-p;
     par_ar_ols = ols_est(y_real,p);
+
     for i=p+1:n
         y_nt = flip(y_real(i-p:i-1));
         y_est(i-p) = sum(par_ar_ols'.*y_nt);
@@ -161,7 +162,9 @@ for p=1:ordem_max
     grid on
     plotlatex(fig, ['Histograma do Resíduo - OLS ordem ',num2str(p),''], ' ', '  ');
     hold off
+
     fig = figure; clf
+
     h = bar(fac_erro_ols,'white','LineStyle','-','LineWidth',0.5); hold on
     grid on
     plotlatex(fig, ['Funcao de Autocorrelacao do Residuo - OLS ordem ',num2str(p),''] , 'tau (lag)', 'FAC')
@@ -176,16 +179,41 @@ end
 %------------ CRITÉRIOS DE INFORMAÇÃO ------------%
 
 for p=1:ordem_max
-    
-    Ne = N-p;
+
+    Ne = n-p;
 
     %--------------- YULE-WALKER ---------------%
 
     FPE_yule(p) = Ne*log(var_erro_aryule(p))+Ne*log((Ne+p)/(Ne-p));
-    AIC(p) = Ne*log(var_erro_aryule(p))+2*p;
-    BIC(p) = 
+    AIC_yule(p) = Ne*log(var_erro_aryule(p))+2*p;
+    BIC_yule(p) = Ne*log(var_erro_aryule(p))+p*log(Ne);
+    MDL_yule(p) = Ne*log(var_erro_aryule(p))+(p/2)*log(Ne);
+
+    %------------ MÍNIMOS QUADRADOS -------------%
 
     FPE_ols(p) = Ne*log(var_erro_ols(p))+Ne*log((Ne+p)/(Ne-p));
-    AIC(p) = Ne*log(var_erro_ols(p))+2*p;
+    AIC_ols(p) = Ne*log(var_erro_ols(p))+2*p;
+    BIC_ols(p) = Ne*log(var_erro_ols(p))+p*log(Ne);
+    MDL_ols(p) = Ne*log(var_erro_ols(p))+(p/2)*log(Ne);
 
+end
 
+fig = figure; clf
+
+plot(FPE_yule,'--r','LineWidth',2); hold on
+plot(AIC_yule,'-y','LineWidth',1);
+plot(BIC_yule,'-g','LineWidth',1);
+plot(MDL_yule,'-c','LineWidth',1);
+grid on
+plotlatex2(fig, 'Criterios de Informacao', 'Ordem de p', ' ', 'FPE','AIC','BIC','MDL')
+hold off
+
+fig = figure; clf
+
+plot(FPE_ols,'--r','LineWidth',2); hold on
+plot(AIC_ols,'-y','LineWidth',1);
+plot(BIC_ols,'-g','LineWidth',1);
+plot(MDL_ols,'-c','LineWidth',1);
+grid on
+plotlatex2(fig, 'Criterios de Informacao', 'Ordem de p', ' ', 'FPE','AIC','BIC','MDL')
+hold off

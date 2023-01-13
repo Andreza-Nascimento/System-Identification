@@ -161,7 +161,9 @@ for p=1:ordem_max
     grid on
     plotlatex(fig, ['Histograma do Resíduo - OLS ordem ',num2str(p),''], ' ', '  ');
     hold off
+
     fig = figure; clf
+
     h = bar(fac_erro_ols,'white','LineStyle','-','LineWidth',0.5); hold on
     grid on
     plotlatex(fig, ['Funcao de Autocorrelacao do Residuo - OLS ordem ',num2str(p),''] , 'tau (lag)', 'FAC')
@@ -176,11 +178,36 @@ end
 %------------ CRITÉRIOS DE INFORMAÇÃO ------------%
 
 for p=1:ordem_max
+
     Ne = N-p;
 
-    %--------------- YULE-WALKER %---------------%
+    %--------------- YULE-WALKER ---------------%
 
     FPE_yule(p) = Ne*log(var_erro_aryule(p))+Ne*log((Ne+p)/(Ne-p));
-    FPE_ols(p) = Ne*log(var_erro_ols(p))+Ne*log((Ne+p)/(Ne-p));
+    AIC_yule(p) = Ne*log(var_erro_aryule(p))+2*p;
+    BIC_yule(p) = Ne*log(var_erro_aryule(p))+p*log(Ne);
+    MDL_yule(p) = Ne*log(var_erro_aryule(p))+(p/2)*log(Ne);
 
+    %------------ MÍNIMOS QUADRADOS -------------%
+
+    FPE_ols(p) = Ne*log(var_erro_ols(p))+Ne*log((Ne+p)/(Ne-p));
+    AIC_ols(p) = Ne*log(var_erro_ols(p))+2*p;
+    BIC_ols(p) = Ne*log(var_erro_ols(p))+p*log(Ne);
+    MDL_ols(p) = Ne*log(var_erro_ols(p))+(p/2)*log(Ne);
+
+end
+
+fig = figure; clf
+    
+    h = histfit(erro_ols,20); hold on
+    grid on
+    plotlatex(fig, ['Histograma do Resíduo - OLS ordem ',num2str(p),''], ' ', '  ');
+    hold off
+
+    fig = figure; clf
+    
+    h = bar(fac_erro_ols,'white','LineStyle','-','LineWidth',0.5); hold on
+    grid on
+    plotlatex(fig, ['Funcao de Autocorrelacao do Residuo - OLS ordem ',num2str(p),''] , 'tau (lag)', 'FAC')
+    hold off
 
