@@ -125,7 +125,7 @@ p_lms=[]; X_lms=[];
 for k=max(n,m)+1:N-100
     p_lms=[p_lms; y(k)];
     x_lms=[y(k-1); y(k-2); u(k-1)];
-    X_lms=[X_lms; x_lms'];
+    X_lms=[X_lms; x_lms']
     yhat3=w'*x_lms;
     erro_lms=y(k)-yhat3;
     w=w+lr*erro_lms*x_lms;
@@ -144,7 +144,11 @@ var_residuo_lms = sum(residuo_lms.^2/Ne_lms);
 p_pred_lms=[]; X_pred_lms=[];
 for k=N-100+1:N
   p_pred_lms=[p_pred_lms; y(k)];  
+  %X_pred_lms=[X_pred_lms; y(k-1) u(k-1)]; % ARX(1,1)
   X_pred_lms=[X_pred_lms; y(k-1) y(k-2) u(k-1)]; % ARX(2,1)
+  %X_pred=[X_pred_lms; y(k-1) y(k-2) u(k-1) u(k-2)]; % ARX(2,2)
+  %X_pred=[X_pred_lms; y(k-1) y(k-2) y(k-3) u(k-1)]; % ARX(3,1)
+  %X_pred=[X_pred_lms; y(k-1) y(k-2) y(k-3) u(k-1) u(k-2)]; % ARX(3,2)
 end
 
 y_pred_lms=X_pred_lms*w; 
@@ -157,6 +161,7 @@ var_erro_pred_lms = sum(erro_pred_lms.^2/Ne_pred_lms);
 RMSE_erro_pred_lms = sqrt(var_erro_pred_lms);
 RMSE_residuo_LMS = sqrt(var_residuo_lms);
 
+tau_max = 50;
 
 fcac_residuo_lms = myfac3(residuo_lms,tau_max);
 limconf_lms = (2/sqrt(N))*ones(1,tau_max);
