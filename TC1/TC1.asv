@@ -131,8 +131,6 @@ for p=1:ordem_max
     fig = figure; clf
     h = bar(fac_erro_aryule,'white','LineStyle','-','LineWidth',0.5); hold on
     grid on
-    plot(stand_err_fac,'--b','LineWidth',1);
-    plot(stand_err_fac*(-1),'--b','LineWidth',1);
     plotlatex(fig, ['Funcao de Autocorrelacao do Residuo - AR(',num2str(p),')'] , 'tau (lag)', 'FAC')
     hold off
 
@@ -169,8 +167,6 @@ for p=1:ordem_max
 
     h = bar(fac_erro_ols,'white','LineStyle','-','LineWidth',0.5); hold on
     grid on
-    plot(stand_err_fac,'--b','LineWidth',1);
-    plot(stand_err_fac*(-1),'--b','LineWidth',1);
     plotlatex(fig, ['Funcao de Autocorrelacao do Residuo - OLS ordem ',num2str(p),''] , 'tau (lag)', 'FAC')
     hold off
     
@@ -209,7 +205,7 @@ plot(AIC_yule,'-y','LineWidth',1);
 plot(BIC_yule,'-g','LineWidth',1);
 plot(MDL_yule,'-c','LineWidth',1);
 grid on
-plotlatex2(fig, 'Criterios de Informacao - Yule-Walker', 'Ordem de p', ' ', 'FPE','AIC','BIC','MDL')
+plotlatex2(fig, 'Criterios de Informacao - Yule-', 'Ordem de p', ' ', 'FPE','AIC','BIC','MDL')
 hold off
 
 fig = figure; clf
@@ -219,5 +215,5 @@ plot(AIC_ols,'-y','LineWidth',1);
 plot(BIC_ols,'-g','LineWidth',1);
 plot(MDL_ols,'-c','LineWidth',1);
 grid on
-plotlatex2(fig, 'Criterios de Informacao - OLS', 'Ordem de p', ' ', 'FPE','AIC','BIC','MDL')
+plotlatex2(fig, 'Criterios de Informacao', 'Ordem de p', ' ', 'FPE','AIC','BIC','MDL')
 hold off
