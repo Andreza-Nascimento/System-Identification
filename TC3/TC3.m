@@ -56,16 +56,17 @@ grid on
 plotlatex(fig, 'Sinal de Saída y(k)', 'k', ' ')
 hold off
 
+
 %------------ ESTIMAÇÃO: MÍNIMOS QUADRADOS ------------%
 
-n=2; m=0;  
+n=2; m=1;  
 
 p=[]; X=[];
 N=length(y);
-for k=max(n,m)+1:N-100
+for k=max(n,m)+1:N
   p=[p; y(k)];
   %X=[X; y(k-1) u(k-1)]; % ARX(1,1)
-  X=[X; y(k-1) y(k-2)]; % ARX(2,1) u(k-1)
+  X=[X; y(k-1) y(k-2) u(k-1)]; % ARX(2,1) 
   %X=[X; y(k-1) y(k-2) u(k-1) u(k-2)]; % ARX(2,2)
   %X=[X; y(k-1) y(k-2) y(k-3) u(k-1)]; % ARX(3,1)
   %X=[X; y(k-1) y(k-2) y(k-3) u(k-1) u(k-2)]; % ARX(3,2)
@@ -86,6 +87,7 @@ AIC_ols = Ne*log(var_residuo_ols)+2*p_max;
 BIC_ols = Ne*log(var_residuo_ols)+p_max*log(Ne);
 MDL_ols = Ne*log(var_residuo_ols)+(p_max/2)*log(Ne);
 
+
 %------------ ANÁLISE DOS RESÍDUOS ------------%
 
 fcac_residuo_ols = myfac3(residuo_ols,tau_max);
@@ -104,43 +106,51 @@ fig = figure; clf
  
 histfit(residuo_ols,20); hold on
 grid on
-plotlatex(fig, 'Histograma dos Resíduos - Algoritmo LMS', ' ', '  ');
+plotlatex(fig, 'Histograma dos Resíduos', ' ', '  ');
 hold off
+
 
 %------------------------ CONTROLE PID ------------------------%
 
 %------------ VALORES INICIAIS ------------%
 
-Kp=350;  % Ganho proporcional
-Ki=250;   % Ganho integral
-Kd=200;    % Ganho derivativo
+Kp=170;  % Ganho proporcional
+Ki=50;   % Ganho integral
+Kd=120;    % Ganho derivativo
 
-par = Phihat';
-a_0 = 1;
-b_0 = 1;
+par = Phihat;
 
-den_est = [par a_0];
-num_est = [b_0];
-
+num_est = [par(3) 1];
+den_est = [par(1) par(2) 0];
 G_est = tf(num_est,den_est);
-[Y_est T_est]=myPID(Kp,Ki,Kd,G_est,t);
+%figure; step(G_est)
 
 nump=[1]; denp=[1 10 20];
 Gp=tf(nump,denp); % Plant transfer function
+%figure; step(Gp)
 
+[Y_est T_est]=myPID(Kp,Ki,Kd,G_est,t);
 [Y1 T1]=myPID(Kp,Ki,Kd,Gp,t);   % Resposta malha fechada
+
+% fig = figure; clf
+%  
+% step(Gp); hold on
+% grid on
+% plotlatex(fig, 'Resposta em malha aberta - Modelo Teórico', 'tempo (segundos)', 'Amplitude degrau');
+% hold off
+
 
 fig = figure; clf
  
 plot(T_est, Y_est,'-r', 'LineWidth',1.5); hold on
 grid on
-plotlatex(fig, 'Resposta em malha fechada', 'tempo (segundos)', 'Amplitude degrau');
+plotlatex(fig, 'Resposta em malha fechada - ARX(2,1)', 'tempo (segundos)', 'Amplitude degrau');
 hold off
 
 fig = figure; clf
  
 plot(T1, Y1,'-r', 'LineWidth',1.5); hold on
 grid on
-plotlatex(fig, 'Resposta em malha fechada', 'tempo (segundos)', 'Amplitude degrau');
+plotlatex(fig, 'Resposta em malha fechada - Modelo Teórico', 'tempo (segundos)', 'Amplitude degrau');
 hold off
 

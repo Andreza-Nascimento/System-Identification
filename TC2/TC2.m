@@ -27,19 +27,19 @@ end
 u = u(Nu+1:end);
 y = y(Nu+1:end)';
 
-fig = figure; clf
-
-plot(u); hold on
-grid on
-plotlatex(fig, 'Sinal de Entrada u(k)', 'k', ' ')
-hold off
-
-fig = figure; clf
-
-plot(y); hold on
-grid on
-plotlatex(fig, 'Sinal de Saída y(k)', 'k', ' ')
-hold off
+% fig = figure; clf
+% 
+% plot(u); hold on
+% grid on
+% plotlatex(fig, 'Sinal de Entrada u(k)', 'k', ' ')
+% hold off
+% 
+% fig = figure; clf
+% 
+% plot(y); hold on
+% grid on
+% plotlatex(fig, 'Sinal de Saída y(k)', 'k', ' ')
+% hold off
 
 %------------ ESTIMAÇÃO: MÍNIMOS QUADRADOS ------------%
 
@@ -70,6 +70,7 @@ p_max = max(n,m);
 AIC_ols = Ne*log(var_residuo_ols)+2*p_max;
 BIC_ols = Ne*log(var_residuo_ols)+p_max*log(Ne);
 MDL_ols = Ne*log(var_residuo_ols)+(p_max/2)*log(Ne);
+
 
 %------------ RMSE E ERRO DE PREDIÇÃO ------------%
 
@@ -115,7 +116,6 @@ histfit(residuo_ols,20); hold on
 grid on
 plotlatex(fig, ['Histograma do Resíduo - ARX (',num2str(n),',',num2str(m),')'], ' ', '  ');
 hold off
-
 
 %------------ ESTIMAÇÃO: MÍNIMOS QUADRADOS - LMS ------------%
 
