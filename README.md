@@ -6,7 +6,7 @@
 
 System Identification and Parameter Estimation is a pivotal discipline across various fields such as Engineering and Science. It enables the quantitative modeling of processes, enhancing our understanding of them, and provides the foundation for predicting future behaviors or controlling these processes. This project applies knowledge from statistical analysis, linear algebra, time series analysis, among other areas, to demonstrate practical applications of these concepts.
 
-![System Identification Block Diagram](serie-sem-sazonalidade.eps)
+![Streamflow time series](TC1/serie-sem-sazonalidade.eps)
 
 ## Assignments Description 🗃️
 
