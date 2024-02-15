@@ -10,10 +10,10 @@ System Identification and Parameter Estimation is a pivotal discipline across va
 
 ## Assignments Description 🗃️
 
-### [Assignment 1](Atividade 1): Statistical Analysis 
+### [Assignment 1](Atividade1): Statistical Analysis 
 - **Description:** Present a sequence of MATLAB commands to determine the mean, variance, and autocorrelation of a series of monthly flow rates of reservoirs for power generation.
 
-### [Assignment 2](Atividade 2): Stationarity and Ergodicity Analysis 
+### [Assignment 2](Atividade2): Stationarity and Ergodicity Analysis 
 - **Description:** Simulation of a 1st-order AR model, or AR(1), and its statistical characterization by describing its mean, variance, and autocorrelation function (ACF) theoretical values to compare them to its estimations resulted from the simulation.
 
 ### [Project 1](TC1): AR(p) Modeling for Flow Rate Series 
